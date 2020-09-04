@@ -62,13 +62,44 @@ function addMember() {
         message: 'What is the team members ${roleInfo}',
         name: "roleInfo"
     },
+    {
+        type: "list",
+        message: "Any more team members to add?",
+        choices: [
+            "yes",
+            "no"
+        ],
+        name: "additionalMembers"
     
+    }])
+
+    .then(function({roleInfo,additionalMembers}){
+        let newMember;
+        if (role === "Engineer") {
+            newMember = new Engineer (name, id, email, roleInfo);
+        } else if (role === "Intern") {
+            newMember = new Intern (name, id, email, roleInfo);
+        } else {
+            newMember = new Manager (name, id, email, roleInfo);
+        }
+        employees.push(newMember);
+        addHtml(newMember)
+        .then(function() {
+            if (additionalMembers === "yes") {
+                addMember();
+            } else {
+                finishHtml();
+            }
+    });
+
 
 // After you have your html, you're now ready to create an HTML file using the HTML
 // returned from the `render` function. Now write it to a file named `team.html` in the
 // `output` folder. You can use the variable `outputPath` above target this location.
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
+
+
 
 // HINT: each employee type (manager, engineer, or intern) has slightly different
 // information; write your code to ask different questions via inquirer depending on
